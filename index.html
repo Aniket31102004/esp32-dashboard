@@ -12,9 +12,11 @@
 <body>
   <h1>ESP32 Live Data</h1>
   <div id="dashboard"></div>
+<div>Temperature: <span id="temp">--</span></div>
+<div>Humidity: <span id="hum">--</span></div>
 
   <script>
-    const ESP32_IP = "http://192.168.1.xxx"; // Replace with your ESP32's IP
+    const ESP32_IP = "http://192.168.34.57/"; // Replace with your ESP32's IP
 
     async function fetchData() {
       try {
