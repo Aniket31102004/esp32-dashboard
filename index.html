@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 Smart Dashboard</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    .card { border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 8px; display: inline-block; }
+    .bad { color: red; }
+    .ok { color: green; }
+  </style>
+</head>
+<body>
+  <h1>ESP32 Live Data</h1>
+  <div id="dashboard"></div>
+
+  <script>
+    const ESP32_IP = "http://192.168.1.xxx"; // Replace with your ESP32's IP
+
+    async function fetchData() {
+      try {
+        const res = await fetch(`${ESP32_IP}/data`);
+        const data = await res.json();
+
+        document.getElementById('dashboard').innerHTML = `
+          <div class="card ${data.distance > 25 ? 'bad' : 'ok'}">Distance: ${data.distance} cm</div>
+          <div class="card ${data.temperature > 35 ? 'bad' : 'ok'}">Temperature: ${data.temperature} °C</div>
+          <div class="card ${(data.humidity < 20 || data.humidity > 80) ? 'bad' : 'ok'}">Humidity: ${data.humidity} %</div>
+          <div class="card ${data.soil === 'Dry' ? 'bad' : 'ok'}">Soil: ${data.soil}</div>
+        `;
+      } catch (e) {
+        document.getElementById('dashboard').innerHTML = `<p style="color:red;">ESP32 not reachable!</p>`;
+      }
+    }
+
+    setInterval(fetchData, 2000);
+    fetchData();
+  </script>
+</body>
+</html>
